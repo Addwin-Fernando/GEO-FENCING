@@ -1,0 +1,4 @@
+Flask==2.1.0            # Web framework for building APIs
+geopy==2.2.0            # Library for geolocation calculations
+pytest==6.2.5           # Testing framework for Python
+requests==2.26.0        # Library for making HTTP requests

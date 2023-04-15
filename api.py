@@ -1,48 +1,64 @@
-from flask import Flask, request, redirect
-import GeoFence
+from flask import Flask, request
+from geopy.distance import distance
+
+
+def check(centerlat, centerlon, lat, lon):
+    center = (centerlon, centerlat)
+    GEO_FENCE = calculateGeoFence(center)
+
+    inside_geo_fence = False
+    j = len(GEO_FENCE) - 1
+    for i in range(len(GEO_FENCE)):
+        if (GEO_FENCE[i][1] < lon and GEO_FENCE[j][1] >= lon or GEO_FENCE[j][1] < lon and GEO_FENCE[i][1] >= lon) and (GEO_FENCE[i][0] + (lon - GEO_FENCE[i][1]) / (GEO_FENCE[j][1] - GEO_FENCE[i][1]) * (GEO_FENCE[j][0] - GEO_FENCE[i][0])) < lat:
+            inside_geo_fence = not inside_geo_fence
+        j = i
+
+    return inside_geo_fence
+
+
+def calculateGeoFence(center_point):
+    radius = 25
+
+    num_points = 5
+
+    geo_fence = []
+    for i in range(num_points):
+        bearing = i * (360 / num_points)
+        point = distance(meters=radius).destination(center_point, bearing)
+        geo_fence.append((point.longitude, point.latitude,))
+
+    return geo_fence
+
+
+x = 0
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-
-    return "Working"
-
-
-@app.route("/inside", methods=["POST"])
-def inside():
-    return "inside"
-
-
-@app.route("/outside", methods=["POST"])
-def outside():
-    return "outside"
-
-
-@app.route('/data', methods=['POST'])
+@app.route('/receive_data', methods=['GET', 'POST'])
 def receive_data():
+    global x
     # Get the JSON data from the request body
     data = request.json
-
-    # Display the received data
-    # print("Lat:", data['lat'])
-    res = GeoFence.check(data["center-lat"], data["center-lon"],
-                         data["lat"], data["lon"])
+    res = check(data["center-lat"], data["center-lon"],
+                data["lat"], data["lon"])
 
     if res == True:
-        return "<h1>inside</h1>"
-    elif res == False:
-        return "<h1>outside</h1>"
+        x = 1
+        return 'inside'
     else:
-        return "Default"
+        x = 2
+        return 'outside'
 
-    # if res:
-    #     print("inside")
-    # else:
-    #     print("outside")
 
-    # Return a JSON response
+@app.route('/')
+def index():
+    if x == 0:
+        return "working"
+    elif x == 1:
+        return "Inside"
+    else:
+        return "outside"
 
 
 if __name__ == '__main__':
