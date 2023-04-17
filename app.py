@@ -45,10 +45,10 @@ def receive_data():
 
     if res == True:
         x = 1
-        return 'inside'
+        return 'Unlocked'
     else:
         x = 2
-        return 'outside'
+        return 'Locked'
 
 
 @app.route('/')
