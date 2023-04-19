@@ -7,7 +7,7 @@ def test_app():
     # Test if the API returns "working" for the root URL
     response = client.get('/')
     assert response.status_code == 200
-    assert response.get_data().decode() == "Locked"
+    assert response.get_data().decode() == "LockeD"
 
     # Test if the API returns "Unlocked" for valid data
     response = client.post(
