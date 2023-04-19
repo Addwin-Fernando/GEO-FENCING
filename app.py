@@ -54,7 +54,7 @@ def receive_data():
 @app.route('/')
 def index():
     if x == 0:
-        return "NICE"
+        return "Locked"
     elif x == 1:
         return "Unlocked"
     else:
