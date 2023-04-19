@@ -1,4 +1,4 @@
-import app  # Import your Flask app module
+import app 
 
 
 def test_app():
