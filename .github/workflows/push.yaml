@@ -15,4 +15,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /home/talha/stuff/zeuk/GEO-FENCING
+          git config --global --add safe.directory /home/talha/stuff/zeuk/GEO-FENCING
           git pull
