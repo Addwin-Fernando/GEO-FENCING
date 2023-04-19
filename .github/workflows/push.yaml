@@ -14,4 +14,5 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          whoami
+          cd /home/talha/stuff/zeuk/GEO-FENCING
+          git pull
