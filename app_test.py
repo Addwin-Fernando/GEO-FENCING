@@ -4,7 +4,7 @@ import app
 def test_app():
     client = app.app.test_client()
 
-    # Test if the API returns "working" for the root UR
+    # Test if the API returns "working" for the root URL
     response = client.get('/')
     assert response.status_code == 200
     assert response.get_data().decode() == "Locked"
