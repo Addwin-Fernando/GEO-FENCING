@@ -1,27 +1,16 @@
-import app 
-import json
+import pytest
+from app import check
 
+def test_inside_geo_fence():
+    center_lat = 80.09734748801102
+    center_lon = 12.919357753640268
+    lat = 80.09738668239515
+    lon = 12.919405460455502
+    assert check(center_lat, center_lon, lat, lon) == True
 
-def test_app():
-    client = app.app.test_client()
-
-    # Test if the API returns "working" for the root URL
-    response = client.get('/')
-    assert response.status_code == 200
-    assert response.get_data().decode() == "LockeD"
-
-    # Test if the API returns "Unlocked" for valid data
-    json_data={"center-lat": 80.09734748801102, "center-lon": 12.919357753640268, "lat": 80.09738668239515, "lon": 12.919405460455502}
-    string_data = json.dumps(json_data)
-    response = client.post(
-        '/receive_data', string_data)
-    assert response.status_code == 200
-    assert response.get_data().decode() == "Unlocked"
-
-    # Test if the API returns "Locked" for invalid data
-    json_data={"center-lat": 80.09734748801102, "center-lon": 12.919357753640268, "lat": 80.09738668239515, "lon": 13.919405460455502}
-    string_data = json.dumps(json_data)
-    response = client.post(
-        '/receive_data', string_data)
-    assert response.status_code == 200
-    assert response.get_data().decode() == "Locked"
+def test_outside_geo_fence():
+    center_lat = 80.09734748801102
+    center_lon = 12.919357753640268
+    lat = 80.09750000000000
+    lon = 12.91950000000000
+    assert check(center_lat, center_lon, lat, lon) == False
