@@ -39,7 +39,9 @@ app = Flask(__name__)
 def receive_data():
     global x
     # Get the JSON data from the request body
-    data = request.json
+    # data = request.json
+    data = request.data
+    data = json.loads(data)
     res = check(data["center-lat"], data["center-lon"],
                 data["lat"], data["lon"])
 
